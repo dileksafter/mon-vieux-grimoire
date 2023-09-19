@@ -1,14 +1,19 @@
-const express = require('express');
+const http = require('http');
+const app = require('./app');
 
-const app = express();
-const port = 3000;
 
-app.get('/', (req,res) => {
-    res.send('hello express server')
-})
+const port = '4000'
+app.set('port', port);
 
-app.listen(port,() => {
-    console.log(`server running on http://localhost:${port}`)
-})
+const server = http.createServer(app);
 
-module.exports = app;
+server.on('error', (error) => {
+  console.error(error)
+});
+server.on('listening', () => {
+  const address = server.address();
+  console.log(`Listening on ${port}`);
+  console.log(`http://localhost:${port}`)
+});
+
+server.listen(port);
