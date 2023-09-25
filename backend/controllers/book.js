@@ -9,14 +9,14 @@ exports.getAllBooks = (req, res, next) => {
 }
 
 
-exports.getOneBook = async (req, res, next) => {
+exports.getOneBook = (req, res, next) => {
     const bookId = req.params.id;
     Book.findOne({ _id: bookId })
         .then(books => res.status(200).json(books))
         .catch(error => res.status(404).json({ error }));
 }
 
-exports.getBestRatedBooks = async (req, res, next) => {
+exports.getBestRatedBooks = (req, res, next) => {
     Book.find().sort({ averageRating: -1 }).limit(3)
 
         .then(books => res.status(200).json(books))
@@ -65,7 +65,7 @@ exports.updateABook = (req, res, next) => {
 };
 
 
-exports.createANewBook = async (req, res, next) => {
+exports.createANewBook = (req, res, next) => {
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._id;
     delete bookObject.userId;
@@ -74,19 +74,23 @@ exports.createANewBook = async (req, res, next) => {
         userId: req.auth.userId,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-
     book.save()
         .then(() => res.status(201).json({ message: 'Book saved successfully!' }))
-        .catch((error) => res.status(400).json({ error }));
+        .catch((error) => {
+            console.log(error)
+            res.status(400).json({ error })});
 }
 
 
-exports.addBookRating = async (req, res, next) => {
+exports.addBookRating = (req, res, next) => {
     const bookId = req.params.id;
     const newRating = {
-        userId: req.params.userId,
-        rating: req.params.rating
+        userId: req.auth.userId,
+        rating: req.body.rating
     }
+    console.log(bookId)
+    console.log(newRating)
+    
     Book.updateOne({ _id: bookId }, { $push: { ratings: newRating } })
         .then(() => res.status(201).json({ message: 'Rating added successfully!' }))
         .catch((error) => res.status(400).json({ error }));
