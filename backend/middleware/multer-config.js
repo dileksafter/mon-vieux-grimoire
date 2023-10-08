@@ -18,4 +18,14 @@ const storage = multer.diskStorage({
     }
 });
 
-module.exports = multer({storage}).single('image');
+const fileFilter = (req, file, callback) => {
+    if (file.mimetype === 'image/webp' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png') {
+        callback(null, true);
+    } else {
+        callback(new Error('Invalid file type. Only WEBP, JPEG, JPG and PNG images are allowed.'), false);
+    }
+};
+
+module.exports = multer({ storage, fileFilter }).single('image');
+
+

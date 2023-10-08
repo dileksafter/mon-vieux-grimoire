@@ -3,7 +3,11 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res, next) => {
-    console.log(req.body)
+
+    if (!req.body.password || req.body.password.length < 5) {
+        return res.status(400).json({ error: { message: 'Le mot de passe doit contenir au moins 5 caractères !' } })
+    }
+
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
@@ -21,12 +25,12 @@ exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+                return res.status(401).json({ message: 'Combinaison utilisateur et mot de passe incorrecte !' });
             }
             bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                        return res.status(401).json({ message: 'Combinaison utilisateur et mot de passe incorrecte !' });
                     }
                     res.status(200).json({
                         userId: user._id,
@@ -40,5 +44,5 @@ exports.login = (req, res, next) => {
                 .catch(error => res.status(500).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
- };
+};
 

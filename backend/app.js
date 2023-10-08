@@ -20,7 +20,7 @@ mongoose.connect('mongodb+srv://test_user:mongoosepassword@cluster0.d8rcxte.mong
 const app = express(); // instance qui configure et gére les routes et les middleware de l'app    
 
 
-//CORS (Cross-Origin Resource Sharing) empêche par défaut les requêtes HTTP de différentes origines (ou domaines) d'accéder aux données d'une autre origine.
+//CORS 
 app.use(cors());
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
