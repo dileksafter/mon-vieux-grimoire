@@ -1,14 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const bookRoutes = require('./routes/book');
-const userRoutes = require('./routes/user');
-const path = require('path'); 
+import express from 'express';
+import { json } from 'body-parser';
+import { connect } from 'mongoose';
+import cors from 'cors';
+import bookRoutes from './routes/book';
+import userRoutes from './routes/user';
+import { join } from 'path'; 
 
 
 //logique de connexion a mongodb
-mongoose.connect('mongodb+srv://test_user:mongoosepassword@cluster0.d8rcxte.mongodb.net/?retryWrites=true&w=majority',
+connect('mongodb+srv://test_user:mongoosepassword@cluster0.d8rcxte.mongodb.net/?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -30,11 +30,11 @@ app.use((req, res, next) => {
 });
 
 
-app.use(bodyParser.json())
+app.use(json())
 
 app.use('/api/books', bookRoutes)
 app.use('/api/auth', userRoutes)
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(join(__dirname, 'images')));
 
 
-module.exports = app;
+export default app;

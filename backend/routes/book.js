@@ -1,24 +1,24 @@
-const express = require('express');
-const router = express.Router();
-const auth = require('../middleware/auth');
-const multer = require('../middleware/multer-config');
-const converttowebp = require('../middleware/convertToWEBP')
-const bookCtrl = require('../controllers/book');
+import { Router } from 'express';
+const router = Router();
+import auth from '../middleware/auth';
+import multer from '../middleware/multer-config';
+import converttowebp from '../middleware/convertToWEBP';
+import { getAllBooks, getBestRatedBooks, getOneBook, addBookRating, createANewBook, updateABook, deleteABook } from '../controllers/book';
 
 
-router.get('/', bookCtrl.getAllBooks);
+router.get('/', getAllBooks);
 
-router.get('/bestrating', bookCtrl.getBestRatedBooks);
+router.get('/bestrating', getBestRatedBooks);
 
-router.get('/:id', bookCtrl.getOneBook);
+router.get('/:id', getOneBook);
 
-router.post('/:id/rating', auth, bookCtrl.addBookRating);
+router.post('/:id/rating', auth, addBookRating);
 
-router.post('/', auth, multer, converttowebp, bookCtrl.createANewBook);
+router.post('/', auth, multer, converttowebp, createANewBook);
 
-router.put('/:id', auth, multer, converttowebp, bookCtrl.updateABook);
+router.put('/:id', auth, multer, converttowebp, updateABook);
 
-router.delete('/:id', auth, bookCtrl.deleteABook);
+router.delete('/:id', auth, deleteABook);
 
-module.exports = router;
+export default router;
 

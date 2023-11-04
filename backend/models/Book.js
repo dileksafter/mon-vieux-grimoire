@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const bookSchema = mongoose.Schema({
+const bookSchema = Schema({
     userId: { type: String}, //identifiant MongoDB unique de l'utilisateur qui a créé le livre
     title: { type: String, required: true },
     author: { type: String, required: true },
@@ -15,4 +15,4 @@ const bookSchema = mongoose.Schema({
     averageRating: { type: Number},
 });
 
-module.exports = mongoose.model('Book', bookSchema);
+export default model('Book', bookSchema);

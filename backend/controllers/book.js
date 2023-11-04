@@ -1,34 +1,34 @@
-const Book = require('../models/book')
-const fs = require('fs');
+import Book from '../models/book';
+import { unlink, unlinkSync } from 'fs';
 
-exports.getAllBooks = (req, res, next) => {
+export function getAllBooks(req, res, next) {
     Book.find()
         .then(books => res.status(200).json(books))
         .catch(error => res.status(400).json({ error }));
 }
 
-exports.getOneBook = (req, res, next) => {
+export function getOneBook(req, res, next) {
     const bookId = req.params.id;
     Book.findOne({ _id: bookId })
         .then(books => res.status(200).json(books))
         .catch(error => res.status(404).json({ error }));
 }
 
-exports.getBestRatedBooks = (req, res, next) => {
+export function getBestRatedBooks(req, res, next) {
     Book.find().sort({ averageRating: -1 }).limit(3)
 
         .then(books => res.status(200).json(books))
         .catch(error => res.status(400).json({ error }));
 }
 
-exports.deleteABook = (req, res, next) => {
+export function deleteABook(req, res, next) {
     Book.findOne({ _id: req.params.id })
         .then(book => {
             if (book.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Action impossible !' });
             } else {
                 const filename = book.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
+                unlink(`images/${filename}`, () => {
                     Book.deleteOne({ _id: req.params.id })
                         .then(() => { res.status(200).json({ message: 'Livre supprimé avec succès !' }) })
                         .catch(error => res.status(401).json({ error }));
@@ -38,9 +38,9 @@ exports.deleteABook = (req, res, next) => {
         .catch(error => {
             res.status(500).json({ error });
         });
-};
+}
 
-exports.updateABook = (req, res, next) => {
+export function updateABook(req, res, next) {
     const bookObject = req.file ? {
         ...JSON.parse(req.body.book),
         imageUrl: (`${req.protocol}://${req.get('host')}/images/${req.file.filename}`).replace(/\..+$/, '.webp')
@@ -55,7 +55,7 @@ exports.updateABook = (req, res, next) => {
             // Delete old image if a new one has been added
             if (req.file) {
                 const imagePath = book.imageUrl.split('/images/')[1];
-                fs.unlinkSync(`images/${imagePath}`);
+                unlinkSync(`images/${imagePath}`);
             }
             Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id })
                 .then(() => res.status(200).json({ message: 'Livre modifié avec succés' }))
@@ -65,10 +65,10 @@ exports.updateABook = (req, res, next) => {
         .catch((error) => {
             res.status(400).json({ error });
         });
-};
+}
 
 
-exports.createANewBook = (req, res, next) => {
+export function createANewBook(req, res, next) {
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._id;
     delete bookObject.userId;
@@ -85,7 +85,7 @@ exports.createANewBook = (req, res, next) => {
         });
 }
 
-exports.addBookRating = (req, res, next) => {
+export function addBookRating(req, res, next) {
     const bookId = req.params.id;
     const rating = req.body.rating
     const userId = req.auth.userId
@@ -123,4 +123,4 @@ exports.addBookRating = (req, res, next) => {
                 .catch((error) => res.status(500).json({ error }));
         })
         .catch((error) => res.status(500).json({ error }));
-};
+}

@@ -1,8 +1,8 @@
-const sharp = require('sharp');
-const fs = require('fs');
+import sharp from 'sharp';
+import { unlinkSync } from 'fs';
 
 
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
     if (req.file && req.file.path.includes('.webp')) {
         return next()
     }
@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
                     return next(err);
                 }
                 const imagePath = req.file.path.split('images/')[1];
-                fs.unlinkSync(`images/${imagePath}`);
+                unlinkSync(`images/${imagePath}`);
                 next();
             });
     } else {
