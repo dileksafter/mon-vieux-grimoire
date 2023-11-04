@@ -12,6 +12,8 @@
   },
   "script":
   {
-    "start": "nodemon run server.js"
+    "build": "npm i",
+    "launch": "npm run server.js",
+    "start": "nodemon server.js"
   }
 }

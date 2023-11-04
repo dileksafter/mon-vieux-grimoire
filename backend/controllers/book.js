@@ -40,7 +40,6 @@ exports.deleteABook = (req, res, next) => {
         });
 };
 
-
 exports.updateABook = (req, res, next) => {
     const bookObject = req.file ? {
         ...JSON.parse(req.body.book),
@@ -86,13 +85,11 @@ exports.createANewBook = (req, res, next) => {
         });
 }
 
-
 exports.addBookRating = (req, res, next) => {
     const bookId = req.params.id;
     const rating = req.body.rating
     const userId = req.auth.userId
 
-    // Check if the rating is valid (between 0 and 5)
     if (rating < 0 || rating > 5) {
         return res.status(400).json({ error: 'La notation doit être comprise entre 0 et 5 !' });
     }

@@ -27,5 +27,3 @@ const fileFilter = (req, file, callback) => {
 };
 
 module.exports = multer({ storage, fileFilter }).single('image');
-
-
