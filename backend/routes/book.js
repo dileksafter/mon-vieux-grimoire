@@ -1,8 +1,8 @@
 import { Router } from 'express';
 const router = Router();
-import auth from '../middleware/auth';
-import multer from '../middleware/multer-config';
-import converttowebp from '../middleware/convertToWEBP';
+import auth from '../middleware/auth.js';
+import multer from '../middleware/multer-config.js';
+import converttowebp from '../middleware/convertToWEBP.js';
 import { getAllBooks, getBestRatedBooks, getOneBook, addBookRating, createANewBook, updateABook, deleteABook } from '../controllers/book.js';
 
 
