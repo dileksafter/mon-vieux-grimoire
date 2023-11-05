@@ -1,4 +1,4 @@
-import bookModel from '../models/book.js'
+import {bookModel} from '../models/book.js'
 import fs from 'fs';
 
 const bookCntrlrs = {
