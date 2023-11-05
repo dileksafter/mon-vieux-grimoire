@@ -2,8 +2,8 @@ import express from 'express';
 import { json } from 'body-parser';
 import { connect } from 'mongoose';
 import cors from 'cors';
-import bookRoutes from './routes/book';
-import userRoutes from './routes/user';
+import bookRoutes from './routes/book.js';
+import userRoutes from './routes/user.js';
 import { join } from 'path'; 
 
 
