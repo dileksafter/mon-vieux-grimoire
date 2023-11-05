@@ -15,4 +15,6 @@ const bookSchema = Schema({
     averageRating: { type: Number},
 });
 
-export default model('Book', bookSchema);
+const bookModel = model('Book', bookSchema);
+
+export default bookModel
