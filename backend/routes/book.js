@@ -3,22 +3,22 @@ const router = Router();
 import auth from '../middleware/auth.js';
 import multer from '../middleware/multer-config.js';
 import converttowebp from '../middleware/convertToWEBP.js';
-import { getAllBooks, getBestRatedBooks, getOneBook, addBookRating, createANewBook, updateABook, deleteABook } from '../controllers/book.js';
+import bookCntrlrs from '../controllers/book.js';
 
 
-router.get('/', getAllBooks);
+router.get('/', bookCntrlrs.getAllBooks);
 
-router.get('/bestrating', getBestRatedBooks);
+router.get('/bestrating', bookCntrlrs.getBestRatedBooks);
 
-router.get('/:id', getOneBook);
+router.get('/:id', bookCntrlrs.getOneBook);
 
-router.post('/:id/rating', auth, addBookRating);
+router.post('/:id/rating', auth, bookCntrlrs.addBookRating);
 
-router.post('/', auth, multer, converttowebp, createANewBook);
+router.post('/', auth, multer, converttowebp, bookCntrlrs.createANewBook);
 
-router.put('/:id', auth, multer, converttowebp, updateABook);
+router.put('/:id', auth, multer, converttowebp, bookCntrlrs.updateABook);
 
-router.delete('/:id', auth, deleteABook);
+router.delete('/:id', auth, bookCntrlrs.deleteABook);
 
 export default router;
 
