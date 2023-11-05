@@ -1,33 +1,33 @@
-import Book from '../models/book.js'
+import bookModel from '../models/book.js'
 import fs from 'fs';
 
 const bookCntrlrs = {
     getAllBooks: (req, res, next) => {
-        Book.find()
+       bookModel.find()
             .then(books => res.status(200).json(books))
             .catch(error => res.status(400).json({ error }));
     },
     getOneBook: (req, res, next) => {
         const bookId = req.params.id;
-        Book.findOne({ _id: bookId })
+       bookModel.findOne({ _id: bookId })
             .then(books => res.status(200).json(books))
             .catch(error => res.status(404).json({ error }));
     },
     getBestRatedBooks: (req, res, next) => {
-        Book.find().sort({ averageRating: -1 }).limit(3)
+       bookModel.find().sort({ averageRating: -1 }).limit(3)
     
             .then(books => res.status(200).json(books))
             .catch(error => res.status(400).json({ error }));
     },
     deleteABook : (req, res, next) => {
-        Book.findOne({ _id: req.params.id })
+       bookModel.findOne({ _id: req.params.id })
             .then(book => {
                 if (book.userId != req.auth.userId) {
                     res.status(401).json({ message: 'Action impossible !' });
                 } else {
                     const filename = book.imageUrl.split('/images/')[1];
                     fs.unlink(`images/${filename}`, () => {
-                        Book.deleteOne({ _id: req.params.id })
+                       bookModel.deleteOne({ _id: req.params.id })
                             .then(() => { res.status(200).json({ message: 'Livre supprimé avec succès !' }) })
                             .catch(error => res.status(401).json({ error }));
                     });
@@ -43,7 +43,7 @@ const bookCntrlrs = {
             imageUrl: (`${req.protocol}://${req.get('host')}/images/${req.file.filename}`).replace(/\..+$/, '.webp')
         } : { ...req.body }
         delete bookObject.userId;
-        Book.findOne({ _id: req.params.id })
+       bookModel.findOne({ _id: req.params.id })
             .then((book) => {
                 if (book.userId != req.auth.userId) {
                     return res.status(401).json({ message: 'Action impossible !' });
@@ -54,7 +54,7 @@ const bookCntrlrs = {
                     const imagePath = book.imageUrl.split('/images/')[1];
                     fs.unlinkSync(`images/${imagePath}`);
                 }
-                Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id })
+               bookModel.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id })
                     .then(() => res.status(200).json({ message: 'Livre modifié avec succés' }))
                     .catch(error => res.status(401).json({ error }));
     
@@ -67,7 +67,7 @@ const bookCntrlrs = {
         const bookObject = JSON.parse(req.body.book);
         delete bookObject._id;
         delete bookObject.userId;
-        const book = new Book({
+        const book = newbookModel({
             ...bookObject,
             userId: req.auth.userId,
             imageUrl: (`${req.protocol}://${req.get('host')}/images/${req.file.filename}`).replace(/\..+$/, '.webp')
@@ -88,18 +88,18 @@ const bookCntrlrs = {
             return res.status(400).json({ error: 'La notation doit être comprise entre 0 et 5 !' });
         }
     
-        Book.findOne({ _id: bookId, ratings : {$elemMatch : {userId}}})
+       bookModel.findOne({ _id: bookId, ratings : {$elemMatch : {userId}}})
             .then((book) => {
                 if (book) {
                     return res.status(400).json({ error: 'Vous avez déja noté ce livre !' });
                 }
     
-                Book.updateOne(
+               bookModel.updateOne(
                     { _id: bookId },
                     { $push: { ratings: { userId, grade: rating } } }
                 )
                     .then(() => {
-                        Book.findById(bookId)
+                       bookModel.findById(bookId)
                             .then((updatedBook) => {
                                 const ratings = updatedBook.ratings;
                                 const totalRating = ratings.reduce((sum, rating) => sum + rating.grade, 0);
