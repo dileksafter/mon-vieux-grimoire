@@ -1,5 +1,5 @@
 import { createServer } from 'http';
-import app, { set } from './app';
+import {app} from './app.js';
 
 const normalizePort = val => {
   const port = parseInt(val, 10);

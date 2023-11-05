@@ -1,4 +1,4 @@
-import Book from '../models/book';
+import Book from '../models/book.js';
 import { unlink, unlinkSync } from 'fs';
 
 export function getAllBooks(req, res, next) {

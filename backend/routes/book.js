@@ -3,7 +3,7 @@ const router = Router();
 import auth from '../middleware/auth';
 import multer from '../middleware/multer-config';
 import converttowebp from '../middleware/convertToWEBP';
-import { getAllBooks, getBestRatedBooks, getOneBook, addBookRating, createANewBook, updateABook, deleteABook } from '../controllers/book';
+import { getAllBooks, getBestRatedBooks, getOneBook, addBookRating, createANewBook, updateABook, deleteABook } from '../controllers/book.js';
 
 
 router.get('/', getAllBooks);

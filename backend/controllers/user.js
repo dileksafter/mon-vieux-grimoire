@@ -1,5 +1,5 @@
 import { hash as _hash, compare } from 'bcryptjs';
-import User from '../models/user';
+import User from '../models/user.js';
 import { sign } from 'jsonwebtoken';
 
 export function signup(req, res, next) {
